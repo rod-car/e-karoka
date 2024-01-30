@@ -1,0 +1,94 @@
+{% extends 'client/templates/auth.html' %}
+
+{% block title %} Se connecter {% endblock title %}
+
+{% block content %}
+
+<section class="signin-section h-100">
+    <div class="row h-100">
+        <div class="col-lg-6 m-0 p-0">
+            <div class="auth-cover-wrapper bg-primary-100">
+                <div class="auth-cover">
+                    <div class="title text-center">
+                        <h1 class="text-primary mb-10">Bienvenue</h1>
+                        <p class="text-medium">
+                            Veuillez vous connecter à votre compte pour continuer
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end col -->
+        <div class="col-lg-6 m-0 p-0">
+            <div class="signin-wrapper h-100">
+                <div class="form-wrapper">
+                    <h6 class="mb-15">Formulaire de connexion</h6>
+                    <p class="text-sm mb-25">
+                        Se connecter pour acceder au plateforme
+                    </p>
+
+                    {% if messages %}
+                        <div class="alert alert-danger">
+                            {% for message in messages %}
+                                {{ message }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    {% if form.errors %}
+                        <div class="alert alert-danger">
+                            {{ form.errors }}
+                        </div>
+                    {% endif %}
+
+                    <form method="post" action="">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-12">
+                                <label for="username" class="form-label">{{ form.username.label }}</label>
+                                {{ form.username }}
+                            </div>
+                            <div class="col-12">
+                                <label for="password" class="form-label">{{ form.password.label }}</label>
+                                {{ form.password }}
+                            </div>
+                            <div class="col-xxl-6 col-lg-12 col-md-6">
+                                <div class="text-start text-md-end text-lg-start text-xxl-end mb-30">
+                                    <a href="#" class="hover-underline">Mot de passe oublié?</a>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="button-group d-flex justify-content-center flex-wrap">
+                                    <button type="submit" class="main-btn primary-btn btn-hover w-100 text-center">Se connecter</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <hr class="mt-5 mb-5">
+
+                    <p class="text-sm text-medium text-dark text-center">
+                        Pas encore de compte?
+                        <a href="{% url 'client:register' %}">Créer un compte</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", (e) => {
+        fields = document.querySelectorAll("input")
+        
+        fields.forEach(field => {
+            const div = document.createElement('div')
+            div.classList.add('input-style-1')
+
+            field.parentElement.append(div)
+            div.append(field)
+        })
+    })
+</script>
+
+{% endblock %}

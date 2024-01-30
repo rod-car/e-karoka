@@ -1,0 +1,77 @@
+{% extends 'client/templates/base.html' %}
+
+{% block title %} {{ document.title }} {% endblock title %}
+
+{% block content %}
+    <style>
+        .input-style-1 input, select {
+            border: 1px solid #c9c9c9 !important;
+        }
+
+        .input-style-1 input:focus, select:focus {
+            border-color: #4a6cf7!important;
+            outline: none!important;
+        }
+    </style>
+
+    <div class="container pt-5 mt-5 mb-5 min-vh-100">
+        <div class="d-flex align-items-center justify-content-between mb-5">
+            <h1 class="text-primary text-decoration-underline">Modifier un document</h1>
+            <a class="btn primary-btn btn-hover main-btn" href="{% url 'client:document-list' %}">Liste des documents</a>
+        </div>
+
+        {% if messages %}
+            <div class="alert alert-success">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="row mb-3">
+                <div class="col-6 input-style-1">
+                    <label for="label">{{ form.title.label }}</label>
+                    {{ form.title }}
+                </div>
+                <div class="col-6 input-style-1">
+                    <label for="label">{{ form.author.label }}</label>
+                    {{ form.author }}
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="input-style-1 col-6">
+                    <label for="label">{{ form.presentation_date.label }}</label>
+                    {{ form.presentation_date }}
+                </div>
+                <div class="input-style-1 col-6">
+                    <label for="label">{{ form.presentation_place.label }}</label>
+                    {{ form.presentation_place }}
+                </div>
+            </div>
+            
+            <div class="row mb-3">
+                <div class="select-style-1 col-6">
+                    <label for="label">{{ form.document_type.label }}</label>
+                    <div class="select-position">
+                        {{ form.document_type }}
+                    </div>
+                </div>
+                <div class="select-style-1 col-6">
+                    <label for="label">{{ form.category.label }}</label>
+                    <div class="select-position">
+                        {{ form.category }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <button type="submit" class="main-btn primary-btn btn-hover w-100 text-center">Enregistrer</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

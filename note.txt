@@ -1,0 +1,7 @@
+# Redirection vers la page demandé apres redirection vers login middleware (Equivalent de redirect back php)
+# Type de thèse: Doctorat, Master, License
+# Tri par catégorie de document a mettre en place (OK)
+# Filtre par année de soutenance a mettre en place (OK)
+# Tri par type de document a mettre en place (OK)
+# Ajouter un statut pour un document (indexé, en attente d'indexation, indexation en cours) (OK)
+# Redirect in previous page after login (OK)

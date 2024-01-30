@@ -1,0 +1,74 @@
+{% extends 'client/templates/base.html' %}
+
+{% block title %} Liste des documents {% endblock title %}
+
+{% block content %}
+    <div class="container pt-5 mt-5 mb-5 min-vh-100">
+        <div class="d-flex align-items-center justify-content-between mb-5">
+            <h1 class="text-primary text-decoration-underline">Liste des documents</h1>
+            <a href="{% url 'client:upload' %}" class="btn primary-btn btn-hover main-btn">Déposer documents</a>
+        </div>
+
+        {% if messages %}
+            <div class="alert alert-success">
+                {% for message in messages %}
+                    {{ message | safe }}
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="table-responsive">
+            <table class="table table-striped w-100 table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-nowrap text-muted"># ID</th>
+                        <th class="text-nowrap text-muted"># Titre</th>
+                        <th class="text-nowrap text-muted"># Auteur</th>
+                        <th class="text-nowrap text-muted"># Date</th>
+                        <th class="text-nowrap text-muted"># Path</th>
+                        <th class="text-nowrap text-muted"># Catégorie</th>
+                        <th class="text-nowrap text-muted"># Statut</th>
+                        <th class="text-nowrap text-muted" style="width: 10%;"># Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for document in page_obj %}
+                        <tr class="align-middle">
+                            <td class="fw-bold">{{ document.pk }}</td>
+                            <td>{{ document.title }}</td>
+                            <td>{{ document.author }}</td>
+                            <td>{{ document.presentation_date }}</td>
+                            <td>{{ document.file_path }}</td>
+                            <td>{{ document.category.label }} - {{ document.document_type }}</td>
+                            <td>{% if document.indexed %} Indexé {% else %} En attente d'indexation {% endif %}</td>
+                            <td class="d-flex flex-xl-column flex-xxl-row">
+                                <a href="{% url 'client:document-edit' document.pk %}" class="btn dark-btn btn-hover main-btn btn-sm me-xxl-2 mb-xl-2">Editer</a>
+                                
+                                {% if document.indexed %}
+                                    <a href="{% url 'client:document-reindex' document.pk %}" class="btn primary-btn btn-hover main-btn btn-sm me-xxl-2 mb-xl-2">Reindexer</a>
+                                {% else %}
+                                    <a href="{% url 'client:document-index' document.pk %}" class="btn primary-btn btn-hover main-btn btn-sm me-xxl-2 mb-xl-2">Indexer</a>
+                                {% endif %}
+
+                                <a href="{% url 'client:document-preview' document.pk %}" class="btn warning-btn btn-hover main-btn btn-sm me-xxl-2 mb-xl-2">Voir</a>
+                                <form action="{% url 'client:document-delete' %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="id" value="{{ document.pk }}">
+                                    <button type="submit" class="btn danger-btn btn-hover main-btn btn-sm">Supprimer</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="4">Aucune catégories</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if page_obj.has_other_pages %}
+            {% include "client/includes/pagination.html" %}
+        {% endif %}
+    </div>
+{% endblock %}

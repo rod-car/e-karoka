@@ -1,0 +1,13 @@
+{% extends 'client/templates/base.html' %}
+
+{% block title %} {{ document.title }} {% endblock title %}
+
+{% block content %}
+    <div class="container pt-5 mt-5 mb-5 min-vh-100">
+        <div class="d-flex align-items-center justify-content-between mb-5">
+            <h1 class="text-primary text-decoration-underline">Voir un document</h1>
+            <a class="btn primary-btn btn-hover main-btn" href="{% url 'client:document-list' %}">Liste des documents</a>
+        </div>
+        <iframe class="w-100" style="height: 900px;" src="{{ path }}" frameborder="0"></iframe>
+    </div>
+{% endblock %}

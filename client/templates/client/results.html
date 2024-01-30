@@ -1,0 +1,166 @@
+{% extends 'client/templates/base.html' %}
+
+{% block title %} Résultats pour la requête: {{ query }} {% endblock title %}
+
+{% block content %}
+    <div class="h-auto min-vh-100" style="padding: 0 30px 30px 30px; margin-top: 100px;">
+        <div class="{% if query != '' %} results {% endif %}">
+            <form action="" method="get" class="w-100 p-0 m-0" style="max-width: 100%;">
+                <div class="row w-100" style="min-height: 600px;">
+                    <div class="col-2">
+                        <fieldset class="mb-2">
+                            <h6 style="color: rgb(90, 121, 246);">Rechercher dans:</h6>
+                            <div class="mt-3">
+                                <div class="form-group">
+                                    <input type="radio" value="author" name="filter" id="author" {% if filter_field == 'author' %} checked {% endif %}>
+                                    <label for="author" class="form-label">Auteur</label>
+                                </div>
+
+                                <div class="form-group">
+                                    <input type="radio"value="title"  name="filter" id="title" {% if filter_field == 'title' %} checked {% endif %}>
+                                    <label for="title" class="form-label">Titre</label>
+                                </div>
+
+                                <div class="form-group">
+                                    <input type="radio" value="content" name="filter" id="content" {% if filter_field == 'content' %} checked {% endif %}>
+                                    <label for="content" class="form-label">Conténu</label>
+                                </div>
+
+                                <input type="hidden" name="query" value="{{ query }}">
+                            </div>
+                        </fieldset>
+
+                        <hr class="mb-3">
+
+                        <fieldset class="mb-2">
+                            <h6 style="color: rgb(90, 121, 246);">Dans la catégorie:</h6>
+                            <div class="mt-3">
+                                <div class="form-group">
+                                    <select class="form-select w-100" name="category" id="category">
+                                        <option value="-1">Tous</option>
+                                        {% for category in categories %}
+                                            <option {% if category.pk == category_id %} selected {% endif %} value="{{ category.pk }}">{{ category.label }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <hr class="mb-3">
+
+                        <fieldset class="mb-2">
+                            <h6 style="color: rgb(90, 121, 246);">Année après:</h6>
+                            <div class="mt-3">
+                                <div class="form-group">
+                                    <select class="form-select w-100" name="year" id="year">
+                                        <option value="-1">Tous</option>
+                                        {% for year in years %}
+                                            <option {% if year == current_year %} selected {% endif %} value="{{ year }}">{{ year }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <hr class="mb-3">
+
+                        <fieldset class="mb-2">
+                            <h6 style="color: rgb(90, 121, 246);">Université:</h6>
+                            <div class="mt-3">
+                                <div class="form-group">
+                                    <select class="form-select w-100" name="univ" id="univ">
+                                        <option value="-1">Tous</option>
+                                        {% for univ in universities %}
+                                            <option {% if univ == current_univ %} selected {% endif %} value="{{ univ }}">{{ univ }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <hr class="mb-3">
+                        
+                        <button type="submit" class="btn btn-primary bg-primary-900 w-100 btn-sm">Filtrer</button>
+                    </div>
+                    <div class="col-10">
+                        <fieldset>
+                            <div class="input-style-1">
+                                <input name="query" id="query" value="{{ query }}" type="text" placeholder="Rechercher..." />
+                                {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+                                <button class="btn-search" type="submit">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 24 24">
+                                        <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </fieldset>
+                        
+                        {% if page_obj %}
+                            <p class="mb-3 ms-3 me-3">{{ page_obj.paginator.count }} document(s) trouvés pour la requête <b>{{ query }}</b> en <b>{{ response_time }} s</b></p>
+                            
+                            <div class="results-block w-100">
+                                {% for document in page_obj %}
+                                    <div class="result mb-3">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <h5 class="mb-3 text-muted">
+                                                [{{ document.file_type }}]
+                                                <a class="text-decoration-underline text-primary" href="{% url 'client:preview' document.id %}?query={{ query }}">
+                                                    {{ document.title|truncatewords:7 }}
+                                                </a>
+                                                <span class="fst-italic fw-normal">: {{ document.document_type.label }}</span>
+                                            </h5>
+                                            <span class="badge bg-primary-900 border-1 border-primary">{{ document.category.label }}</span>
+                                        </div>
+                                        {% if filter_field != 'author' %} <span class="fst-italic mb-2"><b>Score:</b> {{ document.score }}</span> {% endif %}
+                                        {% if filter_field == 'content' %} <p class="mb-2">{{ document.get_h_content|safe }}</p>
+                                        {% else %} <p class="mb-2">{{ document.get_content }}</p>{% endif %}
+
+                                        <div class="d-flex justify-content-between mt-2">
+                                            <p class="fw-bold fst-italic mb-3">Par: {{ document.author }}</p>
+                                            <p class="fw-bold fst-italic mb-3">Année: {{ document.presentation_date|date:"Y" }} ({{ document.presentation_place }})</p>
+                                        </div>
+                                    </div>
+                                {% empty %}
+                                    <p class="mb-3 ms-3 me-3">Pas de résultats trouvés pour la requête <b>{{ query }}</b> en <b>{{ response_time }} s</b></p>
+                                {% endfor %}
+                                {% if page_obj.has_other_pages %}
+                                    {% include "client/includes/pagination.html" %}
+                                {% endif %}
+                            </div>
+                        {% else %}
+                            {% if query != "" %}
+                                <div class="results-block mt-3 w-100">
+                                    <p class="mb-3 ms-3 me-3">Pas de résultats trouvés pour la requête <b>{{ query }}</b> en <b>{{ response_time }} s</b></p>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        /*document.addEventListener("DOMContentLoaded", (e) => {
+            e.preventDefault()
+            const select = document.getElementById("category")
+
+            select.addEventListener("change", (event) => {
+                event.preventDefault()
+                const search = window.location.search
+                let replace = ""
+
+                if (search.includes('category'))
+                {
+                    const index = search.lastIndexOf("category=")
+                    replace = search.substring(index, index + 10)
+                }
+
+                if (replace === "")
+                    window.location.href = window.location.href + "&category=" + select.selectedOptions[0].value
+                else
+                    window.location.href = window.location.href.replace(replace, "category=" + select.selectedOptions[0].value)
+            })
+        })*/
+    </script>
+{% endblock content %}

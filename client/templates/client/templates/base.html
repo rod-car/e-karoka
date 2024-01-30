@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-100">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="author" content="colorlib.com">
+    <title>{% block title %} Titre {% endblock title %} </title>
+    {% load static %}
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/auth.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/result.css' %}" rel="stylesheet" />
+
+    <style>
+        .my-nav {
+            border-bottom: 1px solid rgba(74, 108, 247, 0.9);
+            box-shadow: 1px 1px 1px rgba(60, 90, 200, 0.9);
+        }
+
+        .my-footer {
+            border-top: 1px solid rgba(74, 108, 247, 0.9);
+        }
+
+        .my-brand {
+            color: rgb(90, 121, 246)!important;
+        }
+
+        .my-brand:hover {
+            color: rgb(59, 97, 249)!important;
+        }
+
+        .nav-link:hover {
+            color: rgb(90, 121, 246)!important;
+        }
+
+        .btn-search {
+            width: 70px;
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-align: center;
+            align-items: center;
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100%;
+            background: transparent;
+            border: 0;
+            padding: 0;
+            cursor: pointer;
+            display: flex;
+            -ms-flex-pack: center;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn-search svg {
+            fill: rgb(90, 121, 246);
+            width: 40px;
+            height: 40px;
+            transition: all .2s ease-out, color .2s ease-out;
+        }
+
+        .btn-search:hover, .btn-search:focus {
+            outline: 0;
+            box-shadow: none;
+        }
+
+        .btn-search:hover svg, .btn-search:focus svg {
+            fill: rgb(65, 80, 255);
+        }
+
+        .results-block {
+            color: #5d657b!important;
+        }
+
+        .result {
+            padding: 10px;
+            border: 1px solid #e5e5e5;
+            background-color: #21252903;
+        }
+
+        .sidebar {
+            position: fixed;
+        }
+
+        .active {
+            color: #4f72ff!important;
+        }
+    </style>
+</head>
+<body class="h-100">
+    <nav class="navbar navbar-light bg-light fixed-top navbar-expand-lg w-100 mb-5 container-fluid my-nav">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <a class="my-brand navbar-brand mt-2 mt-lg-0 h1 fw-bold" href="{% url 'client:index' %}">
+                e-Karoka
+            </a>
+        </div>
+        <div class="d-flex align-items-center">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link {% if request.path == "/upload" %} active {% endif %}" href="{% url 'client:upload' %}">Déposer un document</a>
+                </li>
+                {% if user.is_authenticated == False %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == "/about" %} active {% endif %}" href="{% url 'client:about' %}">A propos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == "/login" %} active {% endif %}" href="{% url 'client:login' %}">Se connecter</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == "/register" %} active {% endif %}" href="{% url 'client:register' %}">S'inscrire</a>
+                    </li>
+                {% else %}
+                    {% if user.is_superuser == True %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == "/categorie/liste" %} active {% endif %}" href="{% url 'client:category-list' %}">Gérer les catégories</a>
+                        </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == "/about" %} active {% endif %}" href="{% url 'client:about' %}">A propos</a>
+                    </li>
+                    <form action="/logout" class="d-flex" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="border-0 bg-transparent link-primary nav-link">Deconnecter ({{ user.username }})</button>
+                    </form>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    {% block content %}
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Enim aspernatur laudantium exercitationem numquam laboriosam nihil, est iure facilis ea ut unde natus eveniet aliquam qui sint alias autem? Nostrum, assumenda.
+    {% endblock content %}
+
+    <footer class="footer navbar-light bg-light p-3 my-footer">
+        <div class="d-flex justify-content-between w-100">
+            <a href="{% url 'client:index' %}" class="my-brand navbar-branc fw-bold">I-Karoka</a>
+            <span>&copy; Copyright 2023</span>
+        </div>
+    </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", (e) => {
+            // inputs = document.querySelectorAll("input")
+            textareas = document.querySelectorAll("textarea")
+            // selects = document.querySelectorAll("select")
+            
+            /* inputs.forEach(field => {
+                if (field.type === 'checkbox') field.classList.add('form-check-input')
+                else if (field.type === 'radio') field.classList.add('test')
+                else field.classList.add('form-control')
+            })*/
+
+            textareas.forEach(textarea => {
+                // textarea.classList.add('form-control')
+                if (window.location.pathname.includes("document/edit"))
+                    textarea.rows = 1
+                else
+                    textarea.rows = 5
+            })
+
+            /*selects.forEach(select => {
+                select.classList.add('form-select')
+            })*/
+        })
+    </script>
+
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+</body>
+</html>

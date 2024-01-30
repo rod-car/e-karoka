@@ -1,0 +1,43 @@
+{% extends 'client/templates/base.html' %}
+
+{% block title %} Nouveau catégorie {% endblock title %}
+
+{% block content %}
+    <div class="container pt-5 mt-5 min-vh-100">
+        <div class="d-flex align-items-center justify-content-between mb-5">
+            <h1 class="text-primary text-decoration-underline">Liste des catégories</h1>
+            <a href="{% url 'client:category-create' %}" class="btn primary-btn btn-hover main-btn">Nouveau</a>
+        </div>
+        <table class="table table-striped w-100">
+            <thead>
+                <tr>
+                    <th class="text-muted"># ID</th>
+                    <th class="text-muted"># Libelle</th>
+                    <th class="text-muted"># Description</th>
+                    <th class="text-muted" style="width: 10%;"># Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for category in categories %}
+                    <tr class="align-middle">
+                        <td>{{ category.pk }}</td>
+                        <td>{{ category.label }}</td>
+                        <td>{{ category.description }}</td>
+                        <td class="d-flex">
+                            <a href="{% url 'client:category-edit' category.pk %}" class="btn primary-btn btn-hover main-btn btn-sm me-2">Editer</a>
+                            <form action="{% url 'client:category-delete' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="id" value="{{ category.pk }}">
+                                <button type="submit" class="btn danger-btn btn-hover main-btn btn-sm">Supprimer</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4">Aucune catégories</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

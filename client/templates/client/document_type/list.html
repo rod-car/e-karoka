@@ -1,0 +1,45 @@
+{% extends 'client/templates/base.html' %}
+
+{% block title %} Nouveau catégorie {% endblock title %}
+
+{% block content %}
+    <div class="container pt-5 mt-5 min-vh-100">
+        <div class="d-flex align-items-center justify-content-between mb-5">
+            <h1 class="text-primary text-decoration-underline">Liste des types de document</h1>
+            <a href="{% url 'client:document-type-create' %}" class="btn primary-btn btn-hover main-btn">Nouveau</a>
+        </div>
+        <table class="table table-striped w-100 table-hover">
+            <thead>
+                <tr>
+                    <th class="text-muted text-nowrap"># ID</th>
+                    <th class="text-muted text-nowrap"># Libelle</th>
+                    <th class="text-muted text-nowrap"># Description</th>
+                    <th class="text-muted text-nowrap"># Nombre de documents</th>
+                    <th class="text-muted text-nowrap"># Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for type_document in type_documents %}
+                    <tr class="align-middle">
+                        <td>{{ type_document.pk }}</td>
+                        <td>{{ type_document.label }}</td>
+                        <td>{{ type_document.description }}</td>
+                        <td>{{ type_document.documents_set.count }}</td>
+                        <td class="d-flex">
+                            <a href="{% url 'client:document-type-edit' type_document.pk %}" class="btn primary-btn btn-hover main-btn btn-sm me-2">Editer</a>
+                            <form action="{% url 'client:document-type-delete' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="id" value="{{ type_document.pk }}">
+                                <button type="submit" class="btn danger-btn btn-hover main-btn btn-sm">Supprimer</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4">Aucune catégories</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

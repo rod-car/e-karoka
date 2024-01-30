@@ -1,0 +1,59 @@
+{% extends 'client/templates/base.html' %}
+
+{% block title %} {{ document.title }} {% endblock title %}
+
+{% block content %}
+    <div class="container pt-5 mt-5">
+        <div class="row">
+            <div class="col-8">
+                <h2 class="text-primary mt-0 mb-3 text-decoration-underline">{{ document.title }}</h2>
+                <h3 class="mb-2">Auteur: {{ document.author }}</h3>
+                <p class="fst-italic">{{ document.presentation_date }} - {{ document.presentation_place }}</p>
+                <p class="fst-italic">{{ document.document_type.label }}</p>
+            </div>
+            <div class="col-4 text-end">
+                <form action="download" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="document_id" value="{{ document.pk }}">
+                    <button type="submit" class="btn btn-primary">Télécharger ce document</button>
+                </form>
+                <p class="mt-3">
+                    {% if document.number_downloaded != None %}
+                        Nombre de téléchargement: {{ document.number_downloaded }}
+                    {% else %}
+                        Aucun téléchargement
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-12">
+                <h1 class="mb-2">Resumé</h1>
+                <p style="text-align: justify;">{{ document.abstract }}</p>
+            </div>
+        </div>
+
+        {% if query != "" %}
+            <hr>
+            <div class="row">
+                <div class="col-12">
+                    <h1 class="mb-2">Extrait du conténu</h1>
+                    <p style="text-align: justify;">{{ document.get_h_content_full | safe }}</p>
+                </div>
+            </div>
+        {% endif %}
+
+        <hr>
+        <div class="row">
+            <div class="col-12">
+                <h1 class="mb-2">Liste des références</h1>
+                <p>Fonctionnalités a mettre dans un perspective.</p>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-12 mb-5">Cité par {{ document.number_cited }} personne (s)</div>
+        </div>
+    </div>
+{% endblock content %}

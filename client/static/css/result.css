@@ -1,0 +1,9 @@
+.highlighted {
+    background-color: #f1f1c1;
+    padding: 0 5px 0 5px;
+    font-style: italic;
+}
+
+.input-style-1 input {
+    /* border: 1px solid #c9c9c9!important; */
+}

@@ -1,0 +1,45 @@
+{% extends 'client/templates/base.html' %}
+
+{% block title %} Modifier catégorie {% endblock title %}
+
+{% block content %}
+    <style>
+        .input-style-1 input, textarea {
+            border: 1px solid #c9c9c9 !important;
+        }
+
+        .input-style-1 input:focus, textarea:focus {
+            border-color: #4a6cf7!important;
+            outline: none!important;
+        }
+    </style>
+
+    <div class="container pt-5 mt-5 min-vh-100">
+        <div class="d-flex align-items-center justify-content-between mb-5">
+            <h1 class="text-primary text-decoration-underline">Modifier une catégorie</h1>
+            <a href="{% url 'client:category-list' %}" class="btn primary-btn btn-hover main-btn">Liste des catégories</a>
+        </div>
+
+        {% if messages %}
+            <div class="alert alert-success">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="input-style-1">
+                <label for="label" class="form-label">Label</label>
+                <input type="text" name="label" value="{{ category.label }}" id="label">
+            </div>
+
+            <div class="input-style-1">
+                <label for="description" class="form-label">Description</label>
+                <textarea name="description" id="description" cols="30" rows="10">{{ category.label }}</textarea>
+            </div>
+            <button type="submit" class="btn primary-btn btn-hover main-btn w-100 text-center">Enregistrer</button>
+        </form>
+    </div>
+{% endblock %}
