@@ -51,4 +51,4 @@ Permet d'indexer les documents au format PDF, WORD et OpenOffice Word.
 Permet aux utilisateurs d'avoir un acces total dans le systeme.
 
 ## Licence
-MIT
+GNU/LGPL
