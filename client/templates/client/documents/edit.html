@@ -42,17 +42,6 @@
             </div>
 
             <div class="row mb-3">
-                <div class="input-style-1 col-6">
-                    <label for="label">{{ form.presentation_date.label }}</label>
-                    {{ form.presentation_date }}
-                </div>
-                <div class="input-style-1 col-6">
-                    <label for="label">{{ form.presentation_place.label }}</label>
-                    {{ form.presentation_place }}
-                </div>
-            </div>
-            
-            <div class="row mb-3">
                 <div class="select-style-1 col-6">
                     <label for="label">{{ form.document_type.label }}</label>
                     <div class="select-position">
@@ -63,6 +52,19 @@
                     <label for="label">{{ form.category.label }}</label>
                     <div class="select-position">
                         {{ form.category }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="input-style-1 col-6">
+                    <label for="label">{{ form.presentation_date.label }}</label>
+                    {{ form.presentation_date }}
+                </div>
+                <div class="select-style-1 col-6">
+                    <label for="label">{{ form.university.label }}</label>
+                    <div class="select-position">
+                        {{ form.university }}
                     </div>
                 </div>
             </div>

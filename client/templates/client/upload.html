@@ -81,8 +81,7 @@
                         <label for="document">Selectionner le document (PDF / Document Word)</label>
                         <input type="file" 
                             accept="application/pdf, application/vnd.oasis.opendocument.text, text/plain, application/vnd.openxmlformats-officedocument.wordprocessingml.document"   
-                            multiple
-                            name="documents" id="document">
+                            name="document" id="document">
                     </div>
                 </div>
             </div>
@@ -95,9 +94,16 @@
                     </div>
                 </div>
                 <div class="col-6">
-                    <div class="input-style-1">
-                        <label for="presentation_place">Lieu de presentation (Université)</label>
-                        <input type="text" name="presentation_place" id="presentation_place" placeholder="Lieu de presentation">
+                    <div class="select-style-1">
+                        <label for="university">Université</label>
+                        <div class="select-position">
+                            <select name="university" id="university">
+                                <option value="-1">Selectionner l'université</option>
+                                {% for university in universities %}
+                                    <option {% if university.pk == 1 %} selected {% endif %} value="{{ university.pk }}">{{ university.label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>

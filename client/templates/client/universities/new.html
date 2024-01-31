@@ -1,0 +1,50 @@
+{% extends 'client/templates/base.html' %}
+
+{% block title %} Nouveau université {% endblock title %}
+
+{% block content %}
+    <style>
+        .input-style-1 input, textarea {
+            border: 1px solid #c9c9c9 !important;
+        }
+
+        .input-style-1 input:focus, textarea:focus {
+            border-color: #4a6cf7!important;
+            outline: none!important;
+        }
+    </style>
+
+    <div class="container pt-5 mt-5 min-vh-100">
+        <div class="d-flex align-items-center justify-content-between mb-5">
+            <h1 class="text-primary text-decoration-underline">Nouveau université</h1>
+            <a href="{% url 'client:university-list' %}" class="btn primary-btn btn-hover main-btn">Liste universités</a>
+        </div>
+
+        {% if messages %}
+            <div class="alert alert-success">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="input-style-1">
+                <label for="label" class="form-label">{{ form.label.label }}</label>
+                {{ form.label }}
+            </div>
+
+            <div class="input-style-1">
+                <label for="description" class="form-label">{{ form.description.label }}</label>
+                {{ form.description }}
+            </div>
+
+            <div class="mb-4">
+                {{ form.is_public }}
+                <label for="id_is_public" class="form-label m-0 ms-2">Cet université est public</label>
+            </div>
+            <button type="submit" class="btn primary-btn btn-hover main-btn w-100 text-center">Enregistrer</button>
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'client/templates/base.html' %}
+
+{% block title %} Liste des universités {% endblock title %}
+
+{% block content %}
+    <div class="container pt-5 mt-5 min-vh-100">
+        <div class="d-flex align-items-center justify-content-between mb-5">
+            <h1 class="text-primary text-decoration-underline">Liste des universités</h1>
+            <a href="{% url 'client:university-create' %}" class="btn primary-btn btn-hover main-btn">Nouveau</a>
+        </div>
+        <table class="table table-striped w-100 table-hover">
+            <thead>
+                <tr>
+                    <th class="text-muted text-nowrap"># ID</th>
+                    <th class="text-muted text-nowrap"># Libelle</th>
+                    <th class="text-muted text-nowrap"># Description</th>
+                    <th class="text-muted text-nowrap"># Type</th>
+                    <th class="text-muted text-nowrap"># Documents</th>
+                    <th class="text-muted text-nowrap"># Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for university in universities %}
+                    <tr class="align-middle">
+                        <td>{{ university.pk }}</td>
+                        <td>{{ university.label }}</td>
+                        <td>{{ university.description }}</td>
+                        <td>{% if university.is_public %} Public {% else %} Privée {% endif %}</td>
+                        <td>{{ university.documents_set.count }}</td>
+                        <td class="d-flex">
+                            <a href="{% url 'client:university-edit' university.pk %}" class="btn primary-btn btn-hover main-btn btn-sm me-2">Editer</a>
+                            <form action="{% url 'client:university-delete' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="id" value="{{ university.pk }}">
+                                <button type="submit" class="btn danger-btn btn-hover main-btn btn-sm">Supprimer</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="6">Aucun université</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

@@ -17,6 +17,14 @@ class DocumentType(models.Model):
     def __str__(self):
         return self.label
 
+class University(models.Model):
+    label = models.CharField(max_length=255, unique=True)
+    description = models.TextField(null=True)
+    is_public = models.BooleanField(default=True)
+    
+    def __str__(self):
+        return self.label
+
 class Documents(models.Model):
     score: float = 0.0
     terms: list = []
@@ -34,6 +42,7 @@ class Documents(models.Model):
     number_downloaded = models.IntegerField(null=True)
     indexed = models.BooleanField(default=False)
     
+    university = models.ForeignKey(University, on_delete=models.CASCADE, null=True)
     document_type = models.ForeignKey(DocumentType, on_delete=models.CASCADE, null=True)
     category = models.ForeignKey(Categories, on_delete=models.CASCADE, null=True)
     
@@ -50,16 +59,14 @@ class Documents(models.Model):
             documents.append(document)
         return documents
     
-    def findByIdsWithScore(ids: dict, category: int = None, year: int = None, univ: str = None) -> list|None:
+    def findByIdsWithScore(ids: dict, category: int = None, year: int = None, univ: int = None) -> list|None:
         documents = []
         for document_id, score in ids.items():
             document = Documents(**Documents.objects.filter(id=document_id).values(
                 'id', 'title', 'author', 'document_type_id', 'category_id',
-                'presentation_date', 'presentation_place', 'content', 'file_path'
+                'presentation_date', 'university_id', 'content', 'file_path'
             ).get())
             
-            # document = Documents.objects.get(id=document_id)
-
             if category != None:
                 c = get_object_or_404(Categories, pk=category)
                 
@@ -75,7 +82,7 @@ class Documents(models.Model):
                     if document in documents: documents.remove(document)
             
             if univ != None:
-                if document.presentation_place.lower().find(univ.lower()) != -1:
+                if document.university.pk == int(univ):
                     document.set_score(score=score)
                     documents.append(document)
                 else:
@@ -156,7 +163,7 @@ class Index(models.Model):
     """
         Modele contenant l'index inversé
     """
-    term = models.CharField(unique=True, max_length=255)
+    term = models.TextField(max_length=255, unique=True)
     document_ids = models.TextField()
 
 class TfidfValues(models.Model):

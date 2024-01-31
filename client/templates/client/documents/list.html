@@ -21,11 +21,9 @@
             <table class="table table-striped w-100 table-hover">
                 <thead>
                     <tr>
-                        <th class="text-nowrap text-muted"># ID</th>
                         <th class="text-nowrap text-muted"># Titre</th>
                         <th class="text-nowrap text-muted"># Auteur</th>
                         <th class="text-nowrap text-muted"># Date</th>
-                        <th class="text-nowrap text-muted"># Path</th>
                         <th class="text-nowrap text-muted"># Catégorie</th>
                         <th class="text-nowrap text-muted"># Statut</th>
                         <th class="text-nowrap text-muted" style="width: 10%;"># Actions</th>
@@ -34,11 +32,9 @@
                 <tbody>
                     {% for document in page_obj %}
                         <tr class="align-middle">
-                            <td class="fw-bold">{{ document.pk }}</td>
-                            <td>{{ document.title }}</td>
+                            <td class="fw-bold">{{ document.title }}</td>
                             <td>{{ document.author }}</td>
                             <td>{{ document.presentation_date }}</td>
-                            <td>{{ document.file_path }}</td>
                             <td>{{ document.category.label }} - {{ document.document_type }}</td>
                             <td>{% if document.indexed %} Indexé {% else %} En attente d'indexation {% endif %}</td>
                             <td class="d-flex flex-xl-column flex-xxl-row">

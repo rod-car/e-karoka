@@ -86,6 +86,17 @@
         .active {
             color: #4f72ff!important;
         }
+
+        .float-btn {
+            position: fixed;
+            bottom: 60px;
+            right: 50px;
+        }
+
+        .float-btn a {
+            box-shadow: 0px 1px 5px black;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body class="h-100">
@@ -95,72 +106,129 @@
                 e-Karoka
             </a>
         </div>
-        <div class="d-flex align-items-center">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link {% if request.path == "/upload" %} active {% endif %}" href="{% url 'client:upload' %}">Déposer un document</a>
-                </li>
-                {% if user.is_authenticated == False %}
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.path == "/about" %} active {% endif %}" href="{% url 'client:about' %}">A propos</a>
+                {% if user.is_superuser %}
+                    <li class="dropdown">
+                        <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                            Documents
+                        </a>
+                        <div class="px-1 dropdown-menu dropdown-menu-end dropdown-menu-animated topbar-dropdown-menu profile-dropdown">
+                            <ul>
+                                <li class="nav-item">
+                                    <a class="nav-link text-nowrap {% if request.path == "/upload" %} active {% endif %}" href="{% url 'client:upload' %}">Deposer un document</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-nowrap {% if request.path == "/document/list" %} active {% endif %}" href="{% url 'client:document-list' %}">Liste des documents</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-nowrap {% if request.path == "/categorie/liste" %} active {% endif %}" href="{% url 'client:category-list' %}">Gérer les catégories</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-nowrap {% if request.path == "/document/type/list" %} active {% endif %}" href="{% url 'client:document-type-list' %}">Gérer les types</a>
+                                </li>
+                            </ul>
+                        </div>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.path == "/login" %} active {% endif %}" href="{% url 'client:login' %}">Se connecter</a>
+
+                    <li class="dropdown">
+                        <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                            Universités
+                        </a>
+                        <div class="px-1 dropdown-menu dropdown-menu-end dropdown-menu-animated topbar-dropdown-menu profile-dropdown">
+                            <ul>
+                                <li class="nav-item">
+                                    <a class="nav-link text-nowrap {% if request.path == "/university/list" %} active {% endif %}" href="{% url 'client:university-list' %}">Liste des universités</a>
+                                </li>
+                            </ul>
+                        </div>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.path == "/register" %} active {% endif %}" href="{% url 'client:register' %}">S'inscrire</a>
-                    </li>
-                {% else %}
-                    {% if user.is_superuser == True %}
-                        <li class="nav-item">
-                            <a class="nav-link {% if request.path == "/categorie/liste" %} active {% endif %}" href="{% url 'client:category-list' %}">Gérer les catégories</a>
-                        </li>
-                    {% endif %}
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.path == "/about" %} active {% endif %}" href="{% url 'client:about' %}">A propos</a>
-                    </li>
-                    <form action="/logout" class="d-flex" method="post">
-                        {% csrf_token %}
-                        <button type="submit" class="border-0 bg-transparent link-primary nav-link">Deconnecter ({{ user.username }})</button>
-                    </form>
                 {% endif %}
+                
+                <li class="nav-item">
+                    <a class="nav-link {% if request.path == "/about" %} active {% endif %}" href="{% url 'client:about' %}">A propos</a>
+                </li>
+
+                <li class="dropdown">
+                    <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                        Langue
+                    </a>
+                    <div class="px-1 dropdown-menu dropdown-menu-end dropdown-menu-animated topbar-dropdown-menu profile-dropdown">
+                        <ul>
+                            <li class="nav-item">
+                                <a class="nav-link text-nowrap {% if request.path == "/login" %} active {% endif %}" href="{% url 'client:login' %}">Malagasy</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-nowrap {% if request.path == "/register" %} active {% endif %}" href="{% url 'client:register' %}">Français</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="dropdown">
+                    <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                        Utilisateur
+                    </a>
+                    <div class="px-1 dropdown-menu dropdown-menu-end dropdown-menu-animated topbar-dropdown-menu profile-dropdown">
+                        <ul>
+                            {% if not user.is_authenticated %}
+                                <li class="nav-item">
+                                    <a class="nav-link text-nowrap {% if request.path == "/login" %} active {% endif %}" href="{% url 'client:login' %}">Se connecter</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-nowrap {% if request.path == "/register" %} active {% endif %}" href="{% url 'client:register' %}">S'inscrire</a>
+                                </li>
+                            {% else %}
+                                <li class="nav-item">
+                                    <a class="nav-link text-nowrap {% if request.path == "/register" %} active {% endif %}" href="{% url 'client:register' %}">Paramètres</a>
+                                </li>
+
+                                {% if user.is_superuser %}
+                                    <li class="nav-item">
+                                        <a class="nav-link text-nowrap" href="/admin">Administration</a>
+                                    </li>
+                                {% endif %}
+
+                                <form action="/logout" class="d-flex" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" class="border-0 bg-transparent link-primary nav-link text-nowrap">Deconnecter ({{ user.username }})</button>
+                                </form>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </li>
             </ul>
         </div>
     </nav>
 
     {% block content %}
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Enim aspernatur laudantium exercitationem numquam laboriosam nihil, est iure facilis ea ut unde natus eveniet aliquam qui sint alias autem? Nostrum, assumenda.
+        Content
     {% endblock content %}
+
+    {% if not user.is_superuser %}
+        <div class="float-btn">
+            <a href="{% url 'client:upload' %}" class="text-nowrap main-btn primary-btn btn-hover">Deposer un document</a>
+        </div>
+    {% endif %}
 
     <footer class="footer navbar-light bg-light p-3 my-footer">
         <div class="d-flex justify-content-between w-100">
-            <a href="{% url 'client:index' %}" class="my-brand navbar-branc fw-bold">I-Karoka</a>
-            <span>&copy; Copyright 2023</span>
+            <a href="{% url 'client:index' %}" class="my-brand navbar-branc fw-bold">e-Karoka</a>
+            <span id="copy">&copy; Copyright</span>
         </div>
     </footer>
     <script>
         document.addEventListener("DOMContentLoaded", (e) => {
-            // inputs = document.querySelectorAll("input")
+            copy = document.querySelector('#copy')
+            copy.innerHTML = copy.innerHTML + " " + (new Date()).getFullYear()
+
             textareas = document.querySelectorAll("textarea")
-            // selects = document.querySelectorAll("select")
-            
-            /* inputs.forEach(field => {
-                if (field.type === 'checkbox') field.classList.add('form-check-input')
-                else if (field.type === 'radio') field.classList.add('test')
-                else field.classList.add('form-control')
-            })*/
 
             textareas.forEach(textarea => {
-                // textarea.classList.add('form-control')
                 if (window.location.pathname.includes("document/edit"))
                     textarea.rows = 1
                 else
                     textarea.rows = 5
             })
-
-            /*selects.forEach(select => {
-                select.classList.add('form-select')
-            })*/
         })
     </script>
 

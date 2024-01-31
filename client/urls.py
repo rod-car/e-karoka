@@ -1,5 +1,5 @@
 from django.urls import path
-from .client_urls import auth, documents
+from .client_urls import auth, documents, universities
 from .controllers import main, search, upload, category
 
 app_name = "client"
@@ -16,3 +16,4 @@ urlpatterns = [
 ]
 urlpatterns.extend(documents.patterns)
 urlpatterns.extend(auth.patterns)
+urlpatterns.extend(universities.patterns)

@@ -1,12 +1,13 @@
 {% extends 'client/templates/base.html' %}
 
-{% block title %} I-Karoka {% endblock title %}
+{% block title %} i-Karoka {% endblock title %}
 
 {% block content %}
     <style>
         .input-style-1 input {
-            border-color: #5a79f6 !important;
+            border: 0.6mm solid #5a79f6 !important;
             border-radius: 8px;
+            box-shadow: 1px 2px 5px;
         }
     </style>
 
@@ -14,7 +15,7 @@
         <div class="h-100 w-100 d-flex">
             <div class="col-12 text-center d-flex align-items-center justify-content-center">
                 <fieldset class="w-75">
-                    <legend class="mb-5 fs-1 fw-bold" style="color: #4a6cf7;">I-Karoka</legend>
+                    <legend class="mb-5 fs-1 fw-bold" style="color: #4a6cf7;">e-Karoka</legend>
                     <div class="input-style-1">
                         <input name="query" id="query" value="{{ query }}" type="text" placeholder="Rechercher..." />
                         {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
